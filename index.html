@@ -1,54 +1,197 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Metalúrgica Digital</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <header>
-      <div id="icone-robo">
-        <div class="robo-icon-box">
-          <img id="robo-img" src="robo.svg" alt="Robô" />
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#08152f">
+  <meta name="description" content="Painel client-side de monitoramento da linha de produção da Metalúrgica Digital.">
+  <title>Monitoramento | Metalúrgica Digital</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar__main">
+      <a class="brand" href="#monitoramento" aria-label="Metalúrgica Digital — início do monitoramento">
+        <span class="brand__mark">
+          <img src="robo.svg" alt="" width="28" height="28">
+        </span>
+        <span class="brand__copy">
+          <span class="brand__line">
+            <strong>METALÚRGICA DIGITAL</strong>
+            <span class="brand__version">IHM v2.4</span>
+            <span class="iot-status"><span aria-hidden="true">●</span> IoT Online</span>
+          </span>
+          <span class="brand__subtitle">Planta Industrial • Células Robotizadas e Estamparia</span>
+        </span>
+      </a>
+
+      <div class="topbar__tools">
+        <div class="mode-switch" role="group" aria-label="Perfil de visualização">
+          <button class="mode-switch__button is-selected" id="mode-technician" type="button" aria-pressed="true">
+            <span aria-hidden="true">⚒</span> Modo Técnico (Tablet)
+          </button>
+          <button class="mode-switch__button" id="mode-engineer" type="button" aria-pressed="false">
+            <span aria-hidden="true">▥</span> Modo Engenheiro (Gestão)
+          </button>
         </div>
-
-        <div class="marca-info">
-          <div class="marca-linha">
-            <strong id="robo-text">METALÚRGICA DIGITAL</strong>
-
-            <span class="versao">IHM v2.4</span>
-
-            <span class="status-iot">● IoT Online</span>
-          </div>
-
-          <small class="descricao">
-            Planta Industrial • Células Robotizadas e Estamparia
-          </small>
+        <div class="shift-clock" aria-label="Turno 02 e horário local">
+          <span aria-hidden="true">◷</span>
+          <span>Turno 02</span>
+          <span aria-hidden="true">•</span>
+          <time id="clock">--:--</time>
         </div>
       </div>
-      <nav class="navegacao">
-        <a href="#monitoramento" class="card-nav">
-          <span class="icone">🔔</span>
-          <strong>Monitoramento e alertas</strong>
-        </a>
+    </div>
 
-        <a href="#detalhes" class="card-nav">
-          <span class="icone">🤖</span>
-          <strong>Detalhes do robô / ativo</strong>
-        </a>
+    <nav class="section-nav" aria-label="Navegação principal">
+      <button class="section-nav__item is-current" id="nav-monitoring" type="button" aria-current="page">
+        <span class="section-nav__label"><span aria-hidden="true">▦</span> 1. Monitoramento &amp; Alertas</span>
+        <span class="nav-count nav-count--alert" id="nav-failure-count">2</span>
+      </button>
+      <button class="section-nav__item" type="button" data-future-screen="Detalhe do Robô / Ativo">
+        <span class="section-nav__label"><span aria-hidden="true">◉</span> 2. Detalhe do Robô / Ativo</span>
+      </button>
+      <button class="section-nav__item" type="button" data-future-screen="Ordem de Serviço">
+        <span class="section-nav__label"><span aria-hidden="true">▤</span> 3. Ordem de Serviço (OS)</span>
+        <span class="nav-count">1</span>
+      </button>
+      <button class="section-nav__item" type="button" data-future-screen="Comunicados e Decisões">
+        <span class="section-nav__label"><span aria-hidden="true">⚑</span> 4. Comunicados &amp; Decisões</span>
+      </button>
+    </nav>
+  </header>
 
-        <a href="#ordens" class="card-nav">
-          <span class="icone">🛠️</span>
-          <strong>Ordem de serviço</strong>
-        </a>
+  <main class="page" id="monitoramento">
+    <section class="view-context" aria-label="Perfil operacional selecionado">
+      <span class="view-context__icon" aria-hidden="true">⚒</span>
+      <div class="view-context__copy">
+        <h2 id="view-title">Visão: Técnico de Manutenção (Tablet Chão de Fábrica)</h2>
+        <p id="view-description">Controles ampliados para toque (touch-friendly), alertas críticos em destaque e acesso direto à Ordem de Serviço.</p>
+      </div>
+      <span class="restricted-tag"><span aria-hidden="true">▣</span> Dados Restritos da Planta</span>
+    </section>
 
-        <a href="#comunicados" class="card-nav">
-          <span class="icone">📢</span>
-          <strong>Comunicados e decisões</strong>
-        </a>
-      </nav>
-    </header>
-    <script src="script.js"></script>
-  </body>
+    <section class="monitoring" aria-labelledby="page-title">
+      <div class="section-heading">
+        <h1 id="page-title">Monitoramento da Linha de Produção</h1>
+        <p>Telemetria atualizada via sensores IoT <span>(Simulação Client-Side)</span></p>
+      </div>
+
+      <section class="critical-alert" aria-labelledby="critical-title">
+        <span class="critical-alert__symbol" aria-hidden="true">!</span>
+        <div class="critical-alert__content">
+          <div class="critical-alert__eyebrow">
+            <strong id="critical-title">AÇÃO IMEDIATA NECESSÁRIA</strong>
+            <span id="critical-count">2 equipamento(s) em falha crítica</span>
+          </div>
+          <h2 id="critical-asset">Robô Solda Ponto KUKA KR-210 (R-01) — Solda Ponto</h2>
+          <p id="critical-description">Sobreaquecimento crítico no transformador de solda (94°C). Bloqueio automático acionado.</p>
+        </div>
+        <div class="critical-alert__actions" aria-label="Ações do alerta crítico">
+          <button class="button button--outline button--small" type="button" data-action="inspect-critical">
+            <span aria-hidden="true">⌕</span> Inspecionar Robô
+          </button>
+          <button class="button button--danger button--small" type="button" data-action="open-critical-os">
+            <span aria-hidden="true">⚒</span> Abrir OS Urgente
+          </button>
+        </div>
+      </section>
+
+      <section class="summary-grid" aria-label="Indicadores gerais da planta">
+        <article class="summary-card">
+          <div class="summary-card__top">
+            <h2>OEE GLOBAL DA PLANTA</h2>
+            <span class="summary-card__icon summary-card__icon--blue" aria-hidden="true">◉</span>
+          </div>
+          <div class="summary-card__value-row">
+            <strong id="oee-value">78.4%</strong>
+            <span class="target-pill">Meta: 85%</span>
+          </div>
+          <p>Eficiência Global dos Equipamentos no turno</p>
+        </article>
+
+        <article class="summary-card">
+          <div class="summary-card__top">
+            <h2>ATIVOS EM OPERAÇÃO (OK)</h2>
+            <span class="summary-card__icon summary-card__icon--green" aria-hidden="true">✓</span>
+          </div>
+          <div class="summary-card__value-row">
+            <strong class="value--green" id="ok-value">2 <small>de 6 ativos</small></strong>
+          </div>
+          <p>Parâmetros nominais de corrente e vibração</p>
+        </article>
+
+        <article class="summary-card">
+          <div class="summary-card__top">
+            <h2>ALERTA PREDITIVO (ATENÇÃO)</h2>
+            <span class="summary-card__icon summary-card__icon--amber" aria-hidden="true">△</span>
+          </div>
+          <div class="summary-card__value-row">
+            <strong class="value--amber" id="attention-value">2</strong>
+            <span class="attention-pill">Monitorar</span>
+          </div>
+          <p>Desvio de temperatura ou ciclo próximo à revisão</p>
+        </article>
+
+        <article class="summary-card">
+          <div class="summary-card__top">
+            <h2>PARADA / FALHA CRÍTICA</h2>
+            <span class="summary-card__icon summary-card__icon--red" aria-hidden="true">⊗</span>
+          </div>
+          <div class="summary-card__value-row">
+            <strong class="value--red" id="failure-value">2</strong>
+            <span class="critical-pill">Crítico</span>
+          </div>
+          <p>Equipamentos bloqueados aguardando OS</p>
+        </article>
+      </section>
+
+      <section class="filters-panel" aria-label="Filtros de monitoramento">
+        <div class="filters-panel__main">
+          <div class="field-group field-group--search">
+            <label for="asset-search">BUSCAR ATIVO / CÓDIGO IOT</label>
+            <div class="search-control">
+              <span aria-hidden="true">⌕</span>
+              <input id="asset-search" type="search" placeholder="Ex: R-01, KUKA, Solda, Prensa..." autocomplete="off">
+            </div>
+          </div>
+          <div class="field-group field-group--sector">
+            <label for="sector-filter">SETOR DA PLANTA</label>
+            <select id="sector-filter">
+              <option value="">Todos os Setores (4)</option>
+              <option value="Solda Ponto">Solda Ponto (2)</option>
+              <option value="Solda MIG">Solda MIG (2)</option>
+              <option value="Estamparia">Estamparia (1)</option>
+              <option value="Pintura">Pintura (1)</option>
+            </select>
+          </div>
+          <button class="button button--clear" id="clear-filters" type="button">
+            <span aria-hidden="true">⟲</span> Limpar Filtros
+          </button>
+        </div>
+
+        <div class="status-filters" role="group" aria-label="Filtrar por estado operacional">
+          <span class="status-filters__label">ESTADO:</span>
+          <button class="status-chip is-active" type="button" data-status="todos" aria-pressed="true">Todos</button>
+          <button class="status-chip" type="button" data-status="ok" aria-pressed="false"><span class="status-dot status-dot--ok" aria-hidden="true"></span> Ok (Normal)</button>
+          <button class="status-chip" type="button" data-status="atencao" aria-pressed="false"><span class="status-dot status-dot--attention" aria-hidden="true"></span> Atenção</button>
+          <button class="status-chip" type="button" data-status="falha" aria-pressed="false"><span class="status-dot status-dot--failure" aria-hidden="true"></span> Falha Crítica</button>
+        </div>
+      </section>
+
+      <p class="results-announcement" id="results-announcement" aria-live="polite"></p>
+      <section class="assets-grid" id="assets-grid" aria-label="Equipamentos monitorados"></section>
+
+      <section class="empty-state" id="empty-state" hidden aria-live="polite">
+        <span class="empty-state__icon" aria-hidden="true">⌕</span>
+        <h2>Nenhum ativo encontrado</h2>
+        <p>Não há equipamentos que correspondam aos filtros selecionados.</p>
+        <button class="button button--primary" id="empty-clear-filters" type="button">Redefinir filtros</button>
+      </section>
+    </section>
+  </main>
+
+  <div class="notification" id="notification" role="status" aria-live="polite" hidden></div>
+</body>
 </html>
